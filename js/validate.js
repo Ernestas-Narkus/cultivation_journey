@@ -196,6 +196,27 @@ function runSelfTests() {
         return validateSave(s).ok === false
     })
 
+    check("skippedSkills round-trips correctly through save/load", function () {
+        var snapshot = validateClone(buildSaveObject())
+        try {
+            setSkillSkipped(firstSkill, true)
+            var saved = validateClone(buildSaveObject())
+            setSkillSkipped(firstSkill, false)
+            if (!validateSave(saved).ok) return false
+            applySave(saved)
+            return checkSkillSkipped({name: firstSkill}) === true
+        } finally {
+            applySave(validateClone(snapshot))
+        }
+    })
+
+    check("validateSave rejects non-true skippedSkills values", function () {
+        var s = validateClone(buildSaveObject())
+        s.skippedSkills = {}
+        s.skippedSkills[firstSkill] = "yes"
+        return validateSave(s).ok === false
+    })
+
     check("validateSave rejects unknown version", function () {
         var s = validateClone(buildSaveObject())
         s.v = 999999

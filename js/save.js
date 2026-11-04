@@ -100,6 +100,7 @@ function buildSaveObject() {
         settings: JSON.parse(JSON.stringify(gameData.settings)),
         loadouts: JSON.parse(JSON.stringify(gameData.loadouts)),
         collapsedCategories: JSON.parse(JSON.stringify(gameData.collapsedCategories)),
+        skippedSkills: JSON.parse(JSON.stringify(gameData.skippedSkills)),
         tasks: tasks,
         unlocked: unlocked,
         current: {
@@ -148,10 +149,18 @@ function validateSave(obj) {
         }
     }
 
-    var objectFields = ["settings", "loadouts", "collapsedCategories", "tasks", "current"]
+    var objectFields = ["settings", "loadouts", "collapsedCategories", "skippedSkills", "tasks", "current"]
     for (var o = 0; o < objectFields.length; o++) {
         var of = objectFields[o]
         if (of in obj && !isPlainObject(obj[of])) errors.push(of + " must be an object")
+    }
+
+    if (isPlainObject(obj.skippedSkills)) {
+        for (var sk in obj.skippedSkills) {
+            if (obj.skippedSkills[sk] !== true) {
+                errors.push("skippedSkills." + sk + " must be true")
+            }
+        }
     }
 
     if (isPlainObject(obj.tasks)) {
@@ -262,6 +271,7 @@ function applySave(obj) {
     }
     if (isPlainObject(obj.loadouts)) replaceContents(gameData.loadouts, obj.loadouts)
     if (isPlainObject(obj.collapsedCategories)) replaceContents(gameData.collapsedCategories, obj.collapsedCategories)
+    if (isPlainObject(obj.skippedSkills)) replaceContents(gameData.skippedSkills, obj.skippedSkills)
 
     if (isPlainObject(obj.tasks)) {
         for (var name in obj.tasks) {

@@ -10,6 +10,8 @@ var gameData = {
     timeWarpingEnabled: true,
     speedMultiplier: 1,
 
+    skippedSkills: {},
+
     loadouts: {},
     settings: {
         stickySidebar: false,

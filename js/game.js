@@ -302,18 +302,16 @@ function autoPromote() {
     if (isRequirementCompleted(nextEntity.name)) gameData.currentJob = nextEntity
 }
 
-// TODO(design): checkSkillSkipped reads the DOM; left unchanged on purpose
 function checkSkillSkipped(skill) {
-    var row = document.getElementById("row " + skill.name)
-    var isSkillSkipped = row.getElementsByClassName("checkbox")[0].checked
-    return isSkillSkipped
+    return gameData.skippedSkills[skill.name] === true
 }
 
-// TODO(design): checkSkillSkipped reads the DOM; left unchanged on purpose (duplicate declaration kept)
-function checkSkillSkipped(skill) {
-    var row = document.getElementById("row " + skill.name)
-    var isSkillSkipped = row.getElementsByClassName("checkbox")[0].checked
-    return isSkillSkipped
+function setSkillSkipped(name, skipped) {
+    if (skipped) {
+        gameData.skippedSkills[name] = true
+    } else {
+        delete gameData.skippedSkills[name]
+    }
 }
 
 function setSkillWithLowestMaxXp() {

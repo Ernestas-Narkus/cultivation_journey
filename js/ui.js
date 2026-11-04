@@ -96,6 +96,13 @@ function createRow(templates, name, categoryName, categoryType) {
     row.dataset.category = categoryName
     if (categoryType != itemCategories) {
         row.getElementsByClassName("progressBar")[0].onclick = function() {setTask(name)}
+
+        var checkbox = row.getElementsByClassName("checkbox")[0]
+        if (checkbox) {
+            checkbox.onchange = function() {
+                setSkillSkipped(name, this.checked)
+            }
+        }
     } else {
         row.getElementsByClassName("button")[0].onclick = categoryName == "Properties" ? function() {setProperty(name)} : function() {setMisc(name)}
     }
@@ -169,6 +176,14 @@ function updateTaskRows() {
         setDisplay(c.income, isJob ? "" : "none")
         setDisplay(c.effect, isSkill ? "" : "none")
         setDisplay(c.skip, isSkill && autoLearn ? "table-cell" : "none")
+
+        if (isSkill) {
+            var checkbox = c.skip.getElementsByClassName("checkbox")[0]
+            if (checkbox) {
+                var expected = checkSkillSkipped(task)
+                if (checkbox.checked !== expected) checkbox.checked = expected
+            }
+        }
 
         if (isJob) {
             formatCoins(task.getIncome(), c.income)
