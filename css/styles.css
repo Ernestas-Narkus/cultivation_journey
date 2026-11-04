@@ -40,6 +40,54 @@
     --h-misc: #bf9fa0;
 }
 
+html { box-sizing: border-box; }
+*, *::before, *::after { box-sizing: inherit; }
+body { margin: 0; font-size: 15px; }
+h1 { font-size: 36px; margin: 10px 0; }
+
+/* w3-bar / w3-bar-item / w3-button */
+.w3-bar { width: 100%; overflow: hidden; }
+.w3-bar::after { content: ""; display: table; clear: both; }
+.w3-bar .w3-bar-item { float: left; display: block; padding: 8px 16px; border: none; outline: 0; }
+.w3-button {
+    display: inline-block;
+    padding: 8px 16px;
+    border: none;
+    vertical-align: middle;
+    overflow: hidden;
+    text-decoration: none;
+    color: inherit;
+    background-color: inherit;
+    text-align: center;
+    cursor: pointer;
+    white-space: nowrap;
+}
+.w3-button:disabled { cursor: not-allowed; opacity: 0.3; }
+
+/* tab buttons are now <button>: neutralise native button styling */
+button.w3-bar-item[role="tab"] {
+    margin: 0;
+    border-radius: 0;
+    font: inherit;
+    line-height: inherit;
+    -webkit-appearance: none;
+    appearance: none;
+}
+
+/* w3-table-all / w3-bordered (row stripes deliberately transparent so theme tokens rule) */
+.w3-table-all, .w3-bordered { border-collapse: collapse; border-spacing: 0; width: 100%; display: table; }
+.w3-table-all { border: 1px solid var(--border); }
+.w3-table-all tr { background-color: transparent; }
+.w3-table-all td, .w3-table-all th, .w3-bordered td, .w3-bordered th {
+    padding: 8px;
+    display: table-cell;
+    text-align: left;
+    vertical-align: top;
+}
+
+/* w3-border (w3-blue-gray, w3-red, w3-text-gray are already fully defined above with !important) */
+.w3-border { border: 1px solid var(--border) !important; }
+
 html, body {
     font-family: "Segoe UI", system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif;
     line-height: 1.5;
@@ -252,3 +300,49 @@ td.collapsed { display: none !important; }
 .stat-small { font-size: 0.95rem; }
 .stat-caption { font-size: 0.8rem; margin-bottom: 12px; }
 .quick-label { margin-bottom: 4px; }
+
+/* ===== Tab bar fix: explicit visible styling for the button-based tabs ===== */
+.tab-bar[role="tablist"] {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: stretch;
+    width: 100%;
+    min-height: 40px;
+    overflow: visible;
+    background-color: var(--panel);
+    box-shadow: 0 0 0 1px var(--border);
+    border-radius: 4px;
+}
+.tab-bar[role="tablist"]::after { content: none; display: none; }
+.tab-bar[role="tablist"] > .tabButton {
+    float: none;
+    display: block;
+    flex: 0 0 auto;
+    width: 100px;
+    height: 40px;
+    padding: 0 8px;
+    margin: 0;
+    border: none;
+    border-radius: 0;
+    font: inherit;
+    line-height: 40px;
+    text-align: center;
+    color: var(--text);
+    background-color: var(--btn-bg);
+    cursor: pointer;
+    visibility: visible;
+    opacity: 1;
+}
+.tab-bar[role="tablist"] > .tabButton:hover { background-color: var(--btn-hover); }
+.tab-bar[role="tablist"] > .tabButton:last-child { margin-left: auto; }
+
+@media (max-width: 900px) {
+    .layout { flex-direction: column; align-items: stretch; }
+    .center { min-width: 0; width: 100%; overflow-x: auto; }
+    .side-panel, #info.side-panel { width: 100%; }
+    .side-panel.sticky { position: static; max-height: none; overflow-y: visible; }
+    .scroll { overflow-x: auto; }
+    .center table { display: block; max-width: 100%; overflow-x: auto; }
+    .tab-bar { height: auto; }
+    .tab-bar::after { content: ""; display: table; clear: both; }
+}

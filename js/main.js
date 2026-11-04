@@ -56,7 +56,10 @@ requirements = buildRequirements()
 
 loadGameData()
 runSafely(applyCollapsedCategories)
-runSafely(initUI)
+runSafely(function() {
+    initUI()
+    if (typeof validateContent === "function") validateContent()
+})
 
 setCustomEffects()
 addMultipliers()
@@ -65,7 +68,73 @@ document.getElementById("body").classList.add("dark")
 
 setTab(jobTabButton, "jobs")
 
+//Multi-tab guard: once locked, every save in this tab is skipped.
+
+var saveLocked = false
+var saveGameDataRaw = saveGameData
+
+saveGameData = function() {
+    if (saveLocked) return
+    saveGameDataRaw()
+}
+
+window.addEventListener("storage", function(e) {
+    if (saveLocked) return
+    if (e.key !== null && e.key !== SAVE_KEY) return
+    saveLocked = true
+    showStatus("Game was changed in another tab - reload to continue")
+})
+
+//Simulation loop
+
+var SIM_STEP_MS = 1000 / updateSpeed
+var MAX_STEPS_PER_TICK = 200
+var RENDER_INTERVAL_MS = 50
+
+var lastTickTime = performance.now()
+var lastRenderTime = lastTickTime
+var stepAccumulator = 0
+
+function tick() {
+    var now = performance.now()
+    var elapsed = now - lastTickTime
+    lastTickTime = now
+    if (elapsed < 0) elapsed = 0
+    stepAccumulator += elapsed
+
+    var steps = 0
+    while (stepAccumulator >= SIM_STEP_MS && steps < MAX_STEPS_PER_TICK) {
+        simulateStep()
+        stepAccumulator -= SIM_STEP_MS
+        steps += 1
+    }
+    if (stepAccumulator >= SIM_STEP_MS) {
+        stepAccumulator = 0
+    }
+
+    if (!document.hidden && now - lastRenderTime >= RENDER_INTERVAL_MS - 10) {
+        updateUI()
+        lastRenderTime = now
+    }
+}
+
+document.addEventListener("visibilitychange", function() {
+    if (document.hidden) {
+        saveGameData()
+    } else {
+        updateUI()
+        lastRenderTime = performance.now()
+    }
+})
+
+window.addEventListener("pagehide", function() {
+    saveGameData()
+})
+
 update()
-setInterval(update, 1000 / updateSpeed)
-setInterval(saveGameData, 3000)
+lastTickTime = performance.now()
+lastRenderTime = lastTickTime
+
+setInterval(tick, 50)
+setInterval(function() { saveGameData() }, 3000)
 setInterval(setSkillWithLowestMaxXp, 1000)

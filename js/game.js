@@ -348,6 +348,7 @@ function rebirthOne() {
     gameData.rebirthOneCount += 1
 
     rebirthReset()
+    saveGameData()
 }
 
 function rebirthTwo() {
@@ -360,6 +361,7 @@ function rebirthTwo() {
         var task = gameData.taskData[taskName]
         task.maxLevel = 0
     }    
+    saveGameData()
 }
 
 // TODO(design): rank reset policy (martialRank/cultivationRank) is intentionally unchanged
@@ -404,7 +406,7 @@ function enforceLifespan() {
     }
 }
 
-function update() {
+function simulateStep() {
     enforceLifespan()
     increaseDays()
     autoPromote()
@@ -412,5 +414,9 @@ function update() {
     doCurrentTask(gameData.currentJob)
     doCurrentTask(gameData.currentSkill)
     applyExpenses()
+}
+
+function update() {
+    simulateStep()
     updateUI()
 }

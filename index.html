@@ -99,12 +99,12 @@
             </div>
 
             <div class="center">
-            <div class="panel tab-bar">
-                <div class="w3-button w3-bar-item tabButton" id="jobTabButton" onClick="setTab(this, 'jobs')">Map</div>
-                <div class="w3-button w3-bar-item tabButton" onClick="setTab(this, 'skills')">Skills</div>
-                <div class="w3-button w3-bar-item tabButton" id="shopTabButton" onClick="setTab(this, 'shop')">Market</div>
-                <div class="w3-button w3-bar-item tabButton" id="rebirthTabButton" onClick="setTab(this, 'rebirth')">Story</div>
-                <div class="w3-button w3-bar-item tabButton" onClick="setTab(this, 'settings')" style="float: right">Settings</div>
+            <div class="w3-bar tab-bar" role="tablist">
+                <button type="button" role="tab" class="w3-button w3-bar-item tabButton" id="jobTabButton" onClick="setTab(this, 'jobs')">Map</button>
+                <button type="button" role="tab" class="w3-button w3-bar-item tabButton" onClick="setTab(this, 'skills')">Skills</button>
+                <button type="button" role="tab" class="w3-button w3-bar-item tabButton" id="shopTabButton" onClick="setTab(this, 'shop')">Market</button>
+                <button type="button" role="tab" class="w3-button w3-bar-item tabButton" id="rebirthTabButton" onClick="setTab(this, 'rebirth')">Story</button>
+                <button type="button" role="tab" class="w3-button w3-bar-item tabButton" onClick="setTab(this, 'settings')" style="float: right">Settings</button>
             </div>
 
             <div class="panel w3-margin-top w3-padding">
@@ -319,7 +319,6 @@
 </body>
 
 <script src="js/boot.js"></script>
-<script src="js/HackTimer.js"></script>
 <script src="js/content.js"></script>
 <script src="js/classes.js"></script>
 <script src="js/requirements.js"></script> 
@@ -327,5 +326,6 @@
 <script src="js/ui.js"></script>
 <script src="js/save.js"></script>
 <script src="js/main.js"></script>
+<script src="js/validate.js"></script>
 
 </html>
